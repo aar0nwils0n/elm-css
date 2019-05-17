@@ -437,10 +437,14 @@ toKeyedStyleNode allStyles keyedChildNodes =
 toStyleNode : Dict Classname (List Style) -> VirtualDom.Node msg
 toStyleNode styles =
     -- this <style> node will be the first child of the requested one
-    toDeclaration styles
+    let
+        declaration =
+            toDeclaration styles
+    in
+    declaration
         |> VirtualDom.text
         |> List.singleton
-        |> VirtualDom.node "style" []
+        |> (\children -> VirtualDom.keyedNode "div" [] [ ( declaration, VirtualDom.node "style" [] children ) ])
 
 
 
